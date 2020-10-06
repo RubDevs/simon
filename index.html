@@ -82,6 +82,10 @@
       .hide {
         display: none;
       }
+
+      * {
+        font-family: Arial;
+      }
     </style>
   </head>
   <body>
@@ -94,23 +98,25 @@
         Empezar a jugar!
       </button>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
       const celeste = document.getElementById("celeste");
       const violeta = document.getElementById("violeta");
       const naranja = document.getElementById("naranja");
       const verde = document.getElementById("verde");
       const btnEmpezar = document.getElementById("btnEmpezar");
-      const ULTIMO_NIVEL = 10;
+      const ULTIMO_NIVEL = 1;
 
       class Juego {
         constructor() {
-          this.inicializar();
+          this.inicializar = this.inicializar.bind(this);
           this.generarSecuencia();
+          this.inicializar();
           setTimeout(this.siguienteNivel, 500);
         }
 
         inicializar() {
-          btnEmpezar.classList.add("hide");
+          this.toggleBtnEmpezar();
           this.elegirColor = this.elegirColor.bind(this);
           this.siguienteNivel = this.siguienteNivel.bind(this);
           this.nivel = 1;
@@ -120,6 +126,14 @@
             naranja,
             verde,
           };
+        }
+
+        toggleBtnEmpezar() {
+          if (btnEmpezar.classList.contains("hide")) {
+            btnEmpezar.classList.remove("hide");
+          } else {
+            btnEmpezar.classList.add("hide");
+          }
         }
 
         siguienteNivel() {
@@ -201,13 +215,28 @@
               this.eliminarEventosClik();
               if (this.nivel === ULTIMO_NIVEL + 1) {
                 //gano
+                this.ganoElJuego();
               } else {
                 setTimeout(this.siguienteNivel, 1500);
               }
             }
           } else {
             //perdio
+            this.perdioElJuego();
           }
+        }
+
+        ganoElJuego() {
+          swal("Simon Dice", "Felicidades! Ganaste", "success").then(
+            this.inicializar
+          );
+        }
+
+        perdioElJuego() {
+          swal("Simon Dice", "Lo siento, perdiste :(", "error").then(() => {
+            this.eliminarEventosClik();
+            this.inicializar();
+          });
         }
       }
 
