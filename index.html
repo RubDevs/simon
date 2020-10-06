@@ -110,7 +110,8 @@
 
         inicializar() {
           btnEmpezar.classList.add("hide");
-          this.nivel = 5;
+          this.elegirColor = this.elegirColor.bind(this);
+          this.nivel = 1;
           this.colores = {
             celeste,
             violeta,
@@ -121,6 +122,7 @@
 
         siguienteNivel() {
           this.iluminarSecuencia();
+          this.agregarEventosClik();
         }
 
         generarSecuencia() {
@@ -131,7 +133,7 @@
 
         iluminarSecuencia() {
           for (let i = 0; i < this.nivel; i++) {
-            let color = this.transformarNumeroAColor(this.secuencia[i]);
+            const color = this.transformarNumeroAColor(this.secuencia[i]);
             setTimeout(() => this.iluminarColor(color), 1000 * i);
           }
         }
@@ -156,6 +158,17 @@
             case 3:
               return "verde";
           }
+        }
+
+        agregarEventosClik() {
+          this.colores.celeste.addEventListener("click", this.elegirColor);
+          this.colores.violeta.addEventListener("click", this.elegirColor);
+          this.colores.naranja.addEventListener("click", this.elegirColor);
+          this.colores.verde.addEventListener("click", this.elegirColor);
+        }
+
+        elegirColor(ev) {
+          console.log(this);
         }
       }
 
