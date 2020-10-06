@@ -105,7 +105,7 @@
       const naranja = document.getElementById("naranja");
       const verde = document.getElementById("verde");
       const btnEmpezar = document.getElementById("btnEmpezar");
-      const ULTIMO_NIVEL = 10;
+      const ULTIMO_NIVEL = 3;
 
       class Juego {
         constructor() {
@@ -120,6 +120,7 @@
           this.elegirColor = this.elegirColor.bind(this);
           this.siguienteNivel = this.siguienteNivel.bind(this);
           this.nivel = 1;
+          this.puntaje = 0;
           this.colores = {
             celeste,
             violeta,
@@ -210,6 +211,7 @@
           this.iluminarColor(nombreColor);
           if (numeroColor === this.secuencia[this.subnivel]) {
             this.subnivel++;
+            this.puntaje += 1;
             if (this.subnivel === this.nivel) {
               this.nivel++;
               this.eliminarEventosClik();
@@ -217,7 +219,13 @@
                 //gano
                 this.ganoElJuego();
               } else {
-                setTimeout(this.siguienteNivel, 1500);
+                swal(
+                  "Simon Dice",
+                  `Genial! Pasa al siguiente nivel \nPuntaje:${this.puntaje} `,
+                  "success"
+                ).then(() => {
+                  this.avanzarNivel();
+                });
               }
             }
           } else {
@@ -227,9 +235,15 @@
         }
 
         ganoElJuego() {
-          swal("Simon Dice", "Felicidades! Ganaste", "success").then(
-            this.inicializar
-          );
+          swal(
+            "Simon Dice",
+            `Felicidades! Ganaste \nPuntaje:${this.puntaje}`,
+            "success"
+          ).then(this.inicializar);
+        }
+
+        avanzarNivel() {
+          setTimeout(this.siguienteNivel, 1500);
         }
 
         perdioElJuego() {
